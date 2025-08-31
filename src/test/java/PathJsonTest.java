@@ -10,7 +10,7 @@ public class PathJsonTest {
         JsonPath response = RestAssured
                 .get("https://playground.learnqa.ru/api/get_json_homework")
                 .jsonPath();
-// Объявляем переменую типа list и извлекает элементы из response в виде списка
+// Объявляем переменую типа list и извлекает элементы из response в виде списка.
         List answer = response.getList("messages");
         System.out.println(answer.get(1));
     }
