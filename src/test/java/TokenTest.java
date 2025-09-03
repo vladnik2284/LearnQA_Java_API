@@ -13,7 +13,7 @@ public class TokenTest {
 
 
     @Test
-    public void testRestAssured(){
+    public void testRestAssured() throws InterruptedException {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("myHeader1","myValue1");
@@ -23,13 +23,10 @@ public class TokenTest {
         JsonPath response = RestAssured
                 .get("https://playground.learnqa.ru/ajax/api/longtime_job")
                 .jsonPath();
-//        НУЖНО УДАЛИТЬ ЭТО ДЛЯ ОТЛАДКИ
-        response.prettyPrint();
-
         // Объявляем переменую типа String и извлекает token из response в виде строки.
         String tokenOne = response.get("token");
-//        НУЖНО УДАЛИТЬ ЭТО ДЛЯ ОТЛАДКИ
-        System.out.println(tokenOne);
+        // Объявляем переменую типа int и извлекает seconds из response в виде числа.
+        int oneSeconds = response.get("seconds");
 
         JsonPath response1 = RestAssured
                 .given()
@@ -37,13 +34,19 @@ public class TokenTest {
                 .get("https://playground.learnqa.ru/ajax/api/longtime_job")
                 .jsonPath();
 
-        // Объявляем переменую типа String и извлекает token из response в виде строки.
-        String status = response.get("status");
-//        НУЖНО УДАЛИТЬ ЭТО ДЛЯ ОТЛАДКИ
-        response1.prettyPrint();
+        // Объявляем переменую типа String и извлекает status из response в виде строки.
+        String status = response1.get("status");
 
-        if (status == "Job is NOT ready") {
+        if (status.equals("Job is NOT ready")) {
+            int x = oneSeconds * 1000;
+            Thread.sleep(x);
 
+            JsonPath response2 = RestAssured
+                    .given()
+                    .queryParam("token", tokenOne)
+                    .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                    .jsonPath();
+            response2.prettyPrint();
 
         }
     }
