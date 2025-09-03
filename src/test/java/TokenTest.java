@@ -30,21 +30,20 @@ public class TokenTest {
                 .queryParam("token", tokenOne)
                 .get("https://playground.learnqa.ru/ajax/api/longtime_job")
                 .jsonPath();
-
         // Объявляем переменую типа String и извлекает status из response в виде строки.
         String status = response1.get("status");
+        assert status.equals("Job is NOT ready");
 
-        if (status.equals("Job is NOT ready")) {
-            int x = oneSeconds * 1000;
-            Thread.sleep(x);
+        int x = oneSeconds * 1000;
+        Thread.sleep(x);
 
-            JsonPath response2 = RestAssured
-                    .given()
-                    .queryParam("token", tokenOne)
-                    .get("https://playground.learnqa.ru/ajax/api/longtime_job")
-                    .jsonPath();
-            response2.prettyPrint();
-
-        }
+        JsonPath response2 = RestAssured
+                .given()
+                .queryParam("token", tokenOne)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+        // Перезаписываем status из response в виде строки.
+        status = response2.get("status");
+        assert status.equals("Job is ready");
     }
 }
